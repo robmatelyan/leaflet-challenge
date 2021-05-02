@@ -10,6 +10,7 @@ d3.json(url).then(function(data) {
     // Define a function we want to run once for each feature in the features array
   // Give each feature a popup describing the place and time of the earthquake
 function createFeatures(earthquakeData) {
+
     function onEachFeature(feature, layer) {
         layer.bindPopup("<h3>" + feature.properties.place + "</h3><hr><p>" + new Date(feature.properties.time) + "</p>");
     }
@@ -20,10 +21,7 @@ function createFeatures(earthquakeData) {
         var mag = feature.properties.mag
 
         var color = "";
-        if (depth <= 5) {
-            color = "white";
-        }
-        else if (depth <= 10) {
+        if (depth <= 10) {
             color = "green";
         }
         else if (depth <= 20) {
@@ -32,11 +30,14 @@ function createFeatures(earthquakeData) {
         else if (depth <= 40) {
             color = "orange";
         }
-        else if (depth <= 70) {
-            color = "red";
+        else if (depth <= 60) {
+            color = "darkorange";
+        }
+        else if (depth <= 90) {
+            color = "orangered";
         }
         else  {
-            color = "purple";
+            color = "red";
         };
 
         return new L.circleMarker(latlng, {
@@ -45,14 +46,14 @@ function createFeatures(earthquakeData) {
         });
     }
 
-    var earthquakes = L.geoJson(earthquakeData, {
-        onEachFeature: onEachFeature,
-        pointToLayer: pointToLayer,
-    });
+        var earthquakes = L.geoJson(earthquakeData, {
+            onEachFeature: onEachFeature,
+            pointToLayer: pointToLayer,
+        });
       // Sending our earthquakes layer to the createMap function
-    createMap(earthquakes);
+        createMap(earthquakes);
 
-}
+};
 
 function createMap(earthquakes) {
      // Define streetmap
@@ -63,7 +64,7 @@ function createMap(earthquakes) {
     zoomOffset: -1,
     id: "mapbox/streets-v11",
     accessToken: API_KEY
-  }).addTo(myMap);
+  });
 
     var overlayMaps = {
       Earthquakes: earthquakes
@@ -75,13 +76,27 @@ function createMap(earthquakes) {
         zoom: 5,
         layers: [streetMap, earthquakes]
   });
+// set up legend 
+    var legend = L.control({position: "bottomright"});
+        legend.onAdd = function(myMap) {
+            var div = L.DomUtil.create("div", "info legend")
+            var depth = [5, 10, 20, 40, 70]
+            var colors = [
+                "#008000",
+                "#FFFF00",
+                "#FFA500",
+                "#FF8C00",
+                "#FF4500",
+                "#FF0000"
+            ];
+        }
     // Create a layer control
   // Pass in our baseMaps and overlayMaps
-//   // Add the layer control to the map
-//     L.control.layers(overlayMaps, {
-//         collapsed: false
-//     }).addTo(myMap);
-};
+  // Add the layer control to the map
+    L.control.layers(overlayMaps, {
+        collapsed: false
+    }).addTo(myMap);
+}
 
 
 
