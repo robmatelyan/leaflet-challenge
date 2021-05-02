@@ -77,6 +77,8 @@ function createMap(earthquakes) {
         layers: [streetMap, earthquakes]
   });
 // set up legend 
+
+
     var legend = L.control({position: "bottomright"});
         legend.onAdd = function(myMap) {
             var div = L.DomUtil.create("div", "info legend")
@@ -92,7 +94,8 @@ function createMap(earthquakes) {
             //for loop
             for (var i = 0; i < depth.length; i++) {
                 div.innerHTML +=
-                    '<i style="background:' + colors[i] + '"></i> ' + depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] + '<br>' : '+');
+                    '<i style="background:' + colors[i] + '"></i> ' +
+                     depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] + '<br>' : '+');
             }
             return div;
 
