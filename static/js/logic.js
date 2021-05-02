@@ -80,7 +80,7 @@ function createMap(earthquakes) {
     var legend = L.control({position: "bottomright"});
         legend.onAdd = function(myMap) {
             var div = L.DomUtil.create("div", "info legend")
-            var depth = [5, 10, 20, 40, 70]
+            var depth = [10, 20, 40, 60, 90]
             var colors = [
                 "#008000",
                 "#FFFF00",
@@ -89,7 +89,15 @@ function createMap(earthquakes) {
                 "#FF4500",
                 "#FF0000"
             ];
-        }
+            //for loop
+            for (var i = 0; i < depth.length; i++) {
+                div.innerHTML +=
+                    '<i style="background:' + colors[i] + '"></i> ' + depth[i] + (depth[i + 1] ? '&ndash;' + depth[i + 1] + '<br>' : '+');
+            }
+            return div;
+
+        };
+        legend.addTo(myMap);
     // Create a layer control
   // Pass in our baseMaps and overlayMaps
   // Add the layer control to the map
